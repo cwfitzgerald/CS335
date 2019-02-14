@@ -10,7 +10,7 @@
 
 
 #FLAGS
-C++FLAG = -g -std=c++11 -Wall -fsanitize=address,undefined
+C++FLAG = -g -std=c++11 -Wall
 
 #Math Library
 MATH_LIBS = -lm
@@ -20,7 +20,7 @@ EXEC_DIR=.
 #Rule for .cpp files
 # .SUFFIXES : .cc.o 
 
-.cc.o: points2.h
+.cc.o:
 	g++ $(C++FLAG) $(INCLUDES)  -c $< -o $@
 
 

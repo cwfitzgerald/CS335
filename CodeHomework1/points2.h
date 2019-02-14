@@ -142,7 +142,7 @@ namespace teaching_project {
 
 			std::transform(min.sequence_, min.sequence_ + min.size_, max.sequence_, max.sequence_,
 			               [](std::array<Object, 2> const& in, std::array<Object, 2> const& out) {
-			               	   std::array<Object, 2> ret(out);
+				               std::array<Object, 2> ret(out);
 				               ret[0] += in[0];
 				               ret[1] += in[1];
 				               return ret;
@@ -157,7 +157,8 @@ namespace teaching_project {
 				out << "()";
 			}
 			for (std::size_t i = 0; i < some_points2.size_; ++i) {
-				out << "(" << some_points2.sequence_[i][0] << ", " << some_points2.sequence_[i][1] << ") ";
+				out << "(" << some_points2.sequence_[i][0] << ", " << some_points2.sequence_[i][1]
+				    << ") ";
 			}
 			out << '\n';
 			return out;

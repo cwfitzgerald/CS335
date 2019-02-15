@@ -1,5 +1,7 @@
-// --> YOUR NAME here
-// Few comments describing the class Points2
+// Connor Fitzgerald
+// 2018-02-14
+// Points2 is a templated array like class that stores a list of pairs.
+// Each pair has two values of the templated type.
 
 #ifndef CSCI335_HOMEWORK1_POINTS2_H_
 #define CSCI335_HOMEWORK1_POINTS2_H_
@@ -12,18 +14,20 @@
 #include <string>
 
 namespace teaching_project {
-	// Place comments that provide a brief explanation of the class,
-	// and its sample usage.
+	// Points2 is a templated array like class that stores a list of pairs.
+	// Each pair has two values of the templated type.
+	// Supports any Object type that supports operator+= and being streamed to an ostream and from an istream
+	//
+	// Sample Usage
+	// teaching_project::Points2<int> a;
+	// a.ReadPoints2() // Reads points in format <size> <point1.x> <point1.y> ...
+	// std::cout << a; // Includes newline
+	// std::cout << a + a; // Double all of the contents.
 	template <typename Object>
 	class Points2 {
 	  public:
-		// Default "big five" -- you have to alter them for your assignment.
-		// That means that you will remove the "= default" statement.
-		//  and you will provide an implementation.
-
 		// Zero-parameter constructor.
-		// Set size to 0.
-		Points2() : sequence_(nullptr), size_(0){};
+		Points2() noexcept : sequence_(nullptr), size_(0){};
 
 		// Copy-constructor.
 		Points2(const Points2& rhs) :
@@ -32,7 +36,7 @@ namespace teaching_project {
 			std::copy_n(rhs.sequence_, rhs.size_, sequence_);
 		}
 
-		// Standard generaic copy-and-swap idiom
+		// Standard generic copy-and-swap idiom
 		Points2& operator=(const Points2& rhs) {
 			using std::swap; // For ADL
 			Points2 tmp = rhs;
@@ -41,14 +45,14 @@ namespace teaching_project {
 		}
 
 		// Move-constructor.
-		Points2(Points2&& rhs) : sequence_{rhs.sequence_}, size_{rhs.size_} {
+		Points2(Points2&& rhs) noexcept : sequence_{rhs.sequence_}, size_{rhs.size_} {
 			rhs.sequence_ = nullptr;
 			rhs.size_ = 0;
 		}
 
 		// Move-assignment.
 		// Just use std::swap() for all variables.
-		Points2& operator=(Points2&& rhs) {
+		Points2& operator=(Points2&& rhs) noexcept {
 			using std::swap; // For ADL
 
 			swap(sequence_, rhs.sequence_);
@@ -57,11 +61,9 @@ namespace teaching_project {
 			return *this;
 		}
 
-		~Points2() {
+		~Points2() noexcept {
 			delete[] sequence_;
 		}
-
-		// End of big-five.
 
 		// One parameter constructor.
 		Points2(const std::array<Object, 2>& item) :
@@ -82,10 +84,15 @@ namespace teaching_project {
 			int size_of_sequence;
 			input_stream >> size_of_sequence;
 
+			// My code:
+
+			// re-init memory to the proper size
 			delete[] sequence_;
 			sequence_ = new std::array<Object, 2>[size_of_sequence];
 			size_ = size_of_sequence;
 
+			// There are twice as many tokens as there are points.
+			// Boolean allows you to flip flop between writing to the x or the y
 			bool first = true;
 			Object token;
 			for (int i = 0; input_stream >> token; ++i) {
@@ -100,7 +107,7 @@ namespace teaching_project {
 			}
 		}
 
-		size_t size() const {
+		size_t size() const noexcept {
 			return size_;
 		}
 
@@ -121,6 +128,9 @@ namespace teaching_project {
 		//  @return their sum. If the sequences are not of the same size, append the
 		//    result with the remaining part of the larger sequence.
 		friend Points2 operator+(const Points2& c1, const Points2& c2) {
+			// Make copy of larger one because I know I need all of the elements
+			// Get reference to smaller one to avoid unnessiary copy
+
 			// Immediately invoked lambda expression as I'm feeling fancy
 			Points2 max = [&] {
 				if (c1.size_ > c2.size_) {
@@ -140,6 +150,7 @@ namespace teaching_project {
 				}
 			}();
 
+			// Binary std::transform
 			std::transform(min.sequence_, min.sequence_ + min.size_, max.sequence_, max.sequence_,
 			               [](std::array<Object, 2> const& in, std::array<Object, 2> const& out) {
 				               std::array<Object, 2> ret(out);
@@ -153,13 +164,16 @@ namespace teaching_project {
 
 		// Overloading the << operator.
 		friend std::ostream& operator<<(std::ostream& out, const Points2& some_points2) {
+			// Special case 0 to avoid messy refactoring
 			if (some_points2.size_ == 0) {
 				out << "()";
 			}
+			// Loop will not run if size is 0
 			for (std::size_t i = 0; i < some_points2.size_; ++i) {
 				out << "(" << some_points2.sequence_[i][0] << ", " << some_points2.sequence_[i][1]
 				    << ") ";
 			}
+			// Newline needed
 			out << '\n';
 			return out;
 		}

@@ -17,3 +17,9 @@ To run:
 To run with a given file that is redirected to standard input:
 
 ./test_points2 < test_input_file.txt
+
+--------------------------------------------------------------
+Completed: Everything
+Notes: The expected output has an extra newline after the input sections
+       can't easily be accounted for as the missing newlines are in test_point2.cc
+       not in point2.h

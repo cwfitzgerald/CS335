@@ -8,11 +8,11 @@
 
 // Quadratic probing implementation.
 template <typename HashedObj>
-class HashTable {
+class HashTableDouble {
 	public:
 	enum EntryType { ACTIVE, EMPTY, DELETED };
 
-	explicit HashTable(size_t size = 101) : array_(NextPrime(size)) {
+	explicit HashTableDouble(size_t size = 101) : array_(NextPrime(size)) {
 		MakeEmpty();
 	}
 
@@ -112,14 +112,13 @@ class HashTable {
 	}
 
 	size_t FindPos(const HashedObj& x) const {
-		size_t offset = 1;
 		size_t current_pos = InternalHash(x);
+		size_t const offset = InternalRehash(x);
 
 		while (array_[current_pos].info_ != EMPTY &&
 			array_[current_pos].element_ != x) {
 			collisions_ += 1;
-			current_pos += offset; // Compute ith probe.
-			offset += 2;
+			current_pos += offset;
 			if (current_pos >= array_.size())
 				current_pos -= array_.size();
 		}
@@ -144,5 +143,10 @@ class HashTable {
 	size_t InternalHash(const HashedObj& x) const {
 		static std::hash<HashedObj> hf;
 		return hf(x) % array_.size();
+	}
+
+	size_t InternalRehash(const HashedObj& x) const {
+		static std::hash<HashedObj> hf;
+		return (89 - (hf(x)) % 89) % array_.size();
 	}
 };

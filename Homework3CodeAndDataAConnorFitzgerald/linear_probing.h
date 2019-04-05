@@ -5,14 +5,13 @@
 #include <functional>
 #include "prime.h"
 
-
 // Quadratic probing implementation.
 template <typename HashedObj>
-class HashTable {
+class HashTableLinear {
 	public:
 	enum EntryType { ACTIVE, EMPTY, DELETED };
 
-	explicit HashTable(size_t size = 101) : array_(NextPrime(size)) {
+	explicit HashTableLinear(size_t size = 101) : array_(NextPrime(size)) {
 		MakeEmpty();
 	}
 
@@ -112,14 +111,12 @@ class HashTable {
 	}
 
 	size_t FindPos(const HashedObj& x) const {
-		size_t offset = 1;
 		size_t current_pos = InternalHash(x);
 
 		while (array_[current_pos].info_ != EMPTY &&
 			array_[current_pos].element_ != x) {
 			collisions_ += 1;
-			current_pos += offset; // Compute ith probe.
-			offset += 2;
+			current_pos += 1;
 			if (current_pos >= array_.size())
 				current_pos -= array_.size();
 		}

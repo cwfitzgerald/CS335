@@ -8,6 +8,10 @@
 #include <string>
 using namespace std;
 
+#include <locale>
+#include <climits>
+
+
 
 template <typename HashTableType>
 void TestFunctionForHashTable(HashTableType& hash_table, const string& words_filename, const string& query_filename) {

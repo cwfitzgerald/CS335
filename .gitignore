@@ -31,4 +31,9 @@
 *.out
 *.app
 
-**/build
+**/*build*
+**/bin
+**/obj
+**/dep
+**/.idea
+

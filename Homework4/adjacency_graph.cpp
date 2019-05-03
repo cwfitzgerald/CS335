@@ -1,9 +1,8 @@
 #include <cassert>
 #include "adjacency_graph.hpp"
+#include <limits>
 #include <sstream>
 #include <algorithm>
-
-using dd_pair = std::pair<std::size_t, std::size_t>;
 
 void AdjacencyGraph::add_edge(std::size_t start, std::size_t end, float weight) {
     create_node(start);
@@ -31,8 +30,8 @@ std::vector<Adj> AdjacencyGraph::adjacents(std::size_t idx) {
     auto lower = std::lower_bound(adjacency.begin(), adjacency.end(), idx, [](Adj const& lhs, std::size_t rhs) {
         return lhs.start < rhs;
     });
-    auto upper = std::lower_bound(adjacency.begin(), adjacency.end(), idx, [](std::size_t lhs, Adj const& rhs) {
-        return lhs < rhs.end;
+    auto upper = std::upper_bound(adjacency.begin(), adjacency.end(), idx, [](std::size_t lhs, Adj const& rhs) {
+        return lhs < rhs.start;
     });
 
     return std::vector<Adj>(lower, upper);
@@ -51,18 +50,17 @@ void AdjacencyGraph::create_node(std::size_t idx) {
 }
 
 // Add some sanity checking b/c iostreams are god awful
-#define IOS_ASSERT(op) assert(!!(op))
+#define IOS_ASSERT(op) assert(bool(op))
 
-AdjacencyGraph AdjacencyGraph::parse_from_string(std::string const& str) {
+AdjacencyGraph AdjacencyGraph::parse_from_stream(std::istream& file) {
     AdjacencyGraph ag;
-    std::istringstream whole_file_stream(str);
 
     std::size_t count;
-    IOS_ASSERT(whole_file_stream >> count);
-    whole_file_stream.ignore(-1ULL, '\n');
+    IOS_ASSERT(file >> count);
+    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     std::string tmp;
-    while (std::getline(whole_file_stream, tmp)) {
+    while (std::getline(file, tmp)) {
         std::istringstream line_stream(tmp);
 
         std::size_t start;
@@ -74,4 +72,5 @@ AdjacencyGraph AdjacencyGraph::parse_from_string(std::string const& str) {
             ag.add_edge(start, end, weight);
         }
     }
+    return ag;
 }

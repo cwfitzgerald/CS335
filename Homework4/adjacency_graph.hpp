@@ -1,7 +1,10 @@
 #pragma once
 
+#include <iosfwd>
 #include <vector>
 #include <unordered_map>
+
+using dd_pair = std::pair<std::size_t, std::size_t>;
 
 struct Adj {
     std::size_t start;
@@ -24,7 +27,7 @@ public:
 	Node get_node(std::size_t idx);
     void create_node(std::size_t idx);
 
-    static AdjacencyGraph parse_from_string(std::string const& str);
+    static AdjacencyGraph parse_from_stream(std::istream& file);
 
 private:
 	std::vector<Adj> adjacency;

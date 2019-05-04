@@ -1,4 +1,4 @@
-#include "union-find.hpp"
+#include "union_find.hpp"
 #include <cassert>
 #include <iterator>
 

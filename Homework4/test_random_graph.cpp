@@ -1,5 +1,5 @@
 #include "adjacency_graph.hpp"
-#include "union-find.hpp"
+#include "union_find.hpp"
 #include <iostream>
 #include <random>
 #include <cassert>
@@ -21,7 +21,7 @@ int main(int const argc, char ** argv) {
 	}
 
 	std::mt19937 mt(std::random_device{}());
-	std::uniform_int_distribution<std::size_t> const dist(1, count);
+	std::uniform_int_distribution<std::size_t> dist(1, count);
 
 	AdjacencyGraph ag;
 	while (uf.count() != 1) {

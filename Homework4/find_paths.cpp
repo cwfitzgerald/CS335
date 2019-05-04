@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <cassert>
 #include <queue>
 #include "adjacency_graph.hpp"

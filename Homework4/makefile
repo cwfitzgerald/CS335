@@ -1,7 +1,7 @@
 CXXFLAGS := -Wall -Wextra -Wpedantic $(CXXFLAGS)
 DEPS = -MMD -MF $(patsubst obj/%.o,dep/%.d,$@)
 
-.DEFAULT: all
+.DEFAULT_GOAL := all
 .PHONY: all
 
 CreateGraphAndTest: obj/adjacency_graph.o obj/create_graph_and_test.o

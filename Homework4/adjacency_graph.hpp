@@ -11,6 +11,16 @@ struct Adj {
     std::size_t start;
     std::size_t end;
     float weight;
+
+    friend bool operator==(Adj const& lhs, Adj const& rhs) {
+	    return lhs.start == rhs.start
+		    && lhs.end == rhs.end
+		    && lhs.weight == rhs.weight;
+    }
+
+    friend bool operator!=(Adj const& lhs, Adj const& rhs) {
+	    return !(lhs == rhs);
+    }
 };
 
 struct Node {
@@ -32,10 +42,14 @@ public:
     static AdjacencyGraph parse_from_stream(std::istream& file);
 
 	std::size_t node_count() const noexcept {
-		return nodes.size();
+		return nodes_.size();
+	}
+
+	std::size_t edge_count() const noexcept {
+		return adjacency_.size();
 	}
 
 private:
-	std::vector<Adj> adjacency;
-	std::unordered_map<std::size_t, Node> nodes;
+	std::vector<Adj> adjacency_;
+	std::unordered_map<std::size_t, Node> nodes_;
 };

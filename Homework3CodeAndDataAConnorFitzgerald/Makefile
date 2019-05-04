@@ -37,12 +37,12 @@ LIBS_ALL =  -L/usr/lib -L/usr/local/lib $(MATH_LIBS)
 
 
 #ZEROTH PROGRAM
-ALL_OBJ0=create_and_test_hash.o
+ALL_OBJ0=create_and_test_hash.o prime.o
 PROGRAM_0=create_and_test_hash
 $(PROGRAM_0): $(ALL_OBJ0)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ0) $(INCLUDES) $(LIBS_ALL)
 
-ALL_OBJ1=spell_check.o
+ALL_OBJ1=spell_check.o prime.o
 PROGRAM_1=spell_check
 $(PROGRAM_1): $(ALL_OBJ1)
 	g++ $(C++FLAG) -o $(EXEC_DIR)/$@ $(ALL_OBJ1) $(INCLUDES) $(LIBS_ALL)

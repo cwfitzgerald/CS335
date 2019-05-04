@@ -4,40 +4,40 @@
 #include <sstream>
 #include <algorithm>
 
-void AdjacencyGraph::add_edge(std::size_t start, std::size_t end, float weight) {
+void AdjacencyGraph::add_edge(std::size_t const start, std::size_t const end, float const weight) {
     create_node(start);
     create_node(end);
 
     Adj adj{start, end, weight};
 
     auto itr = std::upper_bound(adjacency.begin(), adjacency.end(), adj, [&](Adj left, Adj right) {
-        return dd_pair(left.start, left.end) < dd_pair(right.start, right.end);
+        return ss_pair(left.start, left.end) < ss_pair(right.start, right.end);
     });
     adjacency.insert(itr, adj);
 }
 
 void AdjacencyGraph::remove_edge(std::size_t start, std::size_t end) {
-    dd_pair pair(start, end);
+    ss_pair pair(start, end);
 
-    auto itr = std::lower_bound(adjacency.begin(), adjacency.end(), pair, [&](Adj left, dd_pair right) {
-        return dd_pair(left.start, left.end) < right;
+    auto itr = std::lower_bound(adjacency.begin(), adjacency.end(), pair, [&](Adj left, ss_pair right) {
+        return ss_pair(left.start, left.end) < right;
     });
     assert(itr != adjacency.end());
     adjacency.erase(itr - 1);
 }
 
-std::vector<Adj> AdjacencyGraph::adjacents(std::size_t idx) {
-    auto lower = std::lower_bound(adjacency.begin(), adjacency.end(), idx, [](Adj const& lhs, std::size_t rhs) {
+std::vector<Adj> AdjacencyGraph::adjacents(std::size_t const idx) {
+    auto const lower = std::lower_bound(adjacency.begin(), adjacency.end(), idx, [](Adj const& lhs, std::size_t rhs) {
         return lhs.start < rhs;
     });
-    auto upper = std::upper_bound(adjacency.begin(), adjacency.end(), idx, [](std::size_t lhs, Adj const& rhs) {
+    auto const upper = std::upper_bound(adjacency.begin(), adjacency.end(), idx, [](std::size_t lhs, Adj const& rhs) {
         return lhs < rhs.start;
     });
 
     return std::vector<Adj>(lower, upper);
 }
 
-Node AdjacencyGraph::get_node(std::size_t idx) {
+Node& AdjacencyGraph::get_node(std::size_t idx) {
     auto itr = nodes.find(idx);
     assert(itr != nodes.end());
     return itr->second;

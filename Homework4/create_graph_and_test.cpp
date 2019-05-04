@@ -4,11 +4,11 @@
 #include <cassert>
 #include <algorithm>
 
-std::vector<dd_pair> parse_queries(std::istream& f) {
-    std::vector<dd_pair> list;
+std::vector<ss_pair> parse_queries(std::istream& f) {
+    std::vector<ss_pair> list;
     std::size_t idx1, idx2;
     while(f >> idx1 >> idx2) {
-        list.emplace_back(dd_pair{idx1, idx2});
+        list.emplace_back(ss_pair{idx1, idx2});
     }
     return list;
 }

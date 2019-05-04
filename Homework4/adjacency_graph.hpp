@@ -2,9 +2,10 @@
 
 #include <iosfwd>
 #include <vector>
+#include <limits>
 #include <unordered_map>
 
-using dd_pair = std::pair<std::size_t, std::size_t>;
+using ss_pair = std::pair<std::size_t, std::size_t>;
 
 struct Adj {
     std::size_t start;
@@ -12,8 +13,10 @@ struct Adj {
     float weight;
 };
 
-class Node {
-
+struct Node {
+	float distance{std::numeric_limits<float>::infinity()};
+	std::size_t prev{ std::numeric_limits<std::size_t>::max() };
+	bool visited{ false };
 };
 
 class AdjacencyGraph {
@@ -23,11 +26,14 @@ public:
 
 	std::vector<Adj> adjacents(std::size_t idx);
 
-
-	Node get_node(std::size_t idx);
+	Node& get_node(std::size_t idx);
     void create_node(std::size_t idx);
 
     static AdjacencyGraph parse_from_stream(std::istream& file);
+
+	std::size_t node_count() const noexcept {
+		return nodes.size();
+	}
 
 private:
 	std::vector<Adj> adjacency;
